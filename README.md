@@ -5,7 +5,7 @@ premake5 gmake --luau-path=luau
 ```
 build.
 ```
-make -C luau/build config=release
+make -C luau/build config=release luau luau-analyze
 ```
 # Build Luau.Web
 make sure you have emscripten.

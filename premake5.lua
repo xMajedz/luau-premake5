@@ -4,7 +4,7 @@ newoption {
 	description = "sets the path to luau distribution.",
 }
 
-LUAU_PREFIX = _OPTIONS["luau-path"]
+LUAU_PREFIX = LUAU_PREFIX or _OPTIONS["luau-path"]
 
 LUAU_CONFORMANCE_SOURCE_DIR = '\"'.. path.getabsolute(LUAU_PREFIX .. "/tests/conformance") .. '\"'
 
@@ -259,8 +259,10 @@ project "luau"
 	}
 	
 	filter "action:gmake"
-	links { "pthread" }
-
+	links {
+		"pthread"
+	}
+	
 project "luau-analyze"
 	kind "ConsoleApp"
 	cppdialect "C++17"
@@ -301,8 +303,10 @@ project "luau-analyze"
 	}
 	
 	filter "action:gmake"
-	links { "pthread" }
-
+	links {
+		"pthread"
+	}
+	
 project "luau-ast"
 	kind "ConsoleApp"
 	cppdialect "C++17"
@@ -321,7 +325,7 @@ project "luau-ast"
 		"Luau.Ast",
 		
 		"Luau.Common",
-			
+		
 		"Luau.Config",	
 	}
 
@@ -457,6 +461,9 @@ project "luau-tests"
 		"Luau.Common",
 		
 		"extern.isocline",
+		
+		-- executable dependencies
+		"luau-test-link-vm", "luau-test-link-codegen",
 	}
 	defines {
 		"DOCTEST_CONFIG_DOUBLE_STRINGIFY",
@@ -469,7 +476,6 @@ project "luau-tests"
 	links { "pthread" }
 
 project "luau-test-link-vm"
-	--kind "None"
 	kind "ConsoleApp"
 	includedirs {
 		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
@@ -482,8 +488,6 @@ project "luau-test-link-vm"
 	links {
 		"Luau.CLI.Lib",
 		
-		--"Luau.Ast",
-		
 		"Luau.Common",
 		
 		"Luau.Config",
@@ -492,7 +496,6 @@ project "luau-test-link-vm"
 	}
 
 project "luau-test-link-codegen"
-	--kind "None"
 	kind "ConsoleApp"
 	includedirs {
 		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
@@ -505,8 +508,6 @@ project "luau-test-link-codegen"
 	}
 	links {
 		"Luau.CLI.Lib",
-		
-		--"Luau.Ast",
 		
 		"Luau.Common",
 		

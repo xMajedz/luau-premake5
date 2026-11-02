@@ -4,16 +4,18 @@ newoption {
 	description = "sets the path to luau distribution.",
 }
 
-PREFIX = _OPTIONS["luau-path"] .. "/"
+LUAU_PREFIX = _OPTIONS["luau-path"]
+
+LUAU_CONFORMANCE_SOURCE_DIR = '\"'.. path.getabsolute(LUAU_PREFIX .. "/tests/conformance") .. '\"'
 
 workspace "Luau"
 	language "C++"
 	configurations {
 		"Debug", "Release"
 	}
-	location "%{PREFIX}build"
-	objdir ("%{PREFIX}build")
-	targetdir ("%{PREFIX}build")
+	location  "%{LUAU_PREFIX}/build"
+	objdir    "%{LUAU_PREFIX}/build"
+	targetdir "%{LUAU_PREFIX}/build"
 	
 	filter "configurations:Debug"
 	defines {
@@ -31,28 +33,26 @@ project "Luau.Ast"
 	kind "Staticlib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "Ast/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/Ast/include", "%{LUAU_PREFIX}/Common/include",
 	}
 	files {
-		PREFIX .. "Ast/src/*.cpp"
+		"%{LUAU_PREFIX}/Ast/src/*.cpp"
 	}
 	
 	filter "action:gmake"
 	targetname "luauast"
-	
-	buildcommands "echo %{PREFIX}"
 
 project "Luau.Compiler"
 	kind "Staticlib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "Compiler/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/Compiler/include", "%{LUAU_PREFIX}/Common/include",
 		
-		PREFIX .. "Ast/include",
-		PREFIX .. "Bytecode/include",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Bytecode/include",
 	}
 	files {
-		PREFIX .. "Compiler/src/*.cpp"
+		"%{LUAU_PREFIX}/Compiler/src/*.cpp"
 	}
 	
 	filter "action:gmake"
@@ -62,10 +62,10 @@ project "Luau.VM"
 	kind "Staticlib"
 	cppdialect "C++11"
 	includedirs {
-		PREFIX .. "VM/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/VM/include", "%{LUAU_PREFIX}/Common/include",
 	}
 	files {
-		PREFIX .. "VM/src/*.cpp"
+		"%{LUAU_PREFIX}/VM/src/*.cpp"
 	}
 	
 	filter "action:gmake"
@@ -75,14 +75,14 @@ project "Luau.Config"
 	kind "Staticlib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "Config/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/Config/include", "%{LUAU_PREFIX}/Common/include",
 		
-		PREFIX .. "Ast/include",
-		PREFIX .. "Compiler/include",
-		PREFIX .. "VM/include",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Compiler/include",
+		"%{LUAU_PREFIX}/VM/include",
 	}
 	files {
-		PREFIX .. "Config/src/*.cpp"
+		"%{LUAU_PREFIX}/Config/src/*.cpp"
 	}
 	
 	filter "action:gmake"
@@ -92,13 +92,12 @@ project "Luau.CodeGen"
 	kind "Staticlib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "CodeGen/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/CodeGen/include", "%{LUAU_PREFIX}/Common/include",
 
-		PREFIX .. "VM/include",
-		PREFIX .. "VM/src",
+		"%{LUAU_PREFIX}/VM/include", "%{LUAU_PREFIX}/VM/src",
 	}
 	files {
-		PREFIX .. "CodeGen/src/*.cpp"
+		"%{LUAU_PREFIX}/CodeGen/src/*.cpp"
 	}
 	
 	filter "action:gmake"
@@ -108,14 +107,14 @@ project "Luau.Require"
 	kind "Staticlib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "Require/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/Require/include", "%{LUAU_PREFIX}/Common/include",
 
-		PREFIX .. "Ast/include",
-		PREFIX .. "VM/include",
-		PREFIX .. "Config/include",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/VM/include",
+		"%{LUAU_PREFIX}/Config/include",
 	}
 	files {
-		PREFIX .. "Require/src/*.cpp"
+		"%{LUAU_PREFIX}/Require/src/*.cpp"
 	}
 	
 	filter "action:gmake"
@@ -125,17 +124,17 @@ project "Luau.Analysis"
 	kind "Staticlib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "Common/include", PREFIX .. "Analysis/include",
+		"%{LUAU_PREFIX}/Common/include", "%{LUAU_PREFIX}/Analysis/include",
 
-		PREFIX .. "Ast/include",
-		PREFIX .. "Config/include",
-		PREFIX .. "EqSat/include",
-		PREFIX .. "Compiler/include",
-		PREFIX .. "VM/include",
-		PREFIX .. "Bytecode/include",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Config/include",
+		"%{LUAU_PREFIX}/EqSat/include",
+		"%{LUAU_PREFIX}/Compiler/include",
+		"%{LUAU_PREFIX}/VM/include",
+		"%{LUAU_PREFIX}/Bytecode/include",
 	}
 	files {
-		PREFIX .. "Analysis/src/*.cpp"
+		"%{LUAU_PREFIX}/Analysis/src/*.cpp"
 	}
 	
 	filter "action:gmake"
@@ -145,10 +144,10 @@ project "Luau.EqSat"
 	kind "Staticlib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "Common/include", PREFIX .. "EqSat/include",
+		"%{LUAU_PREFIX}/Common/include", "%{LUAU_PREFIX}/EqSat/include",
 	}
 	files {
-		PREFIX .. "EqSat/src/*.cpp",
+		"%{LUAU_PREFIX}/EqSat/src/*.cpp",
 	}
 	
 	filter "action:gmake"
@@ -158,10 +157,10 @@ project "Luau.Bytecode"
 	kind "StaticLib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "Common/include", PREFIX .. "Bytecode/include",
+		"%{LUAU_PREFIX}/Common/include", "%{LUAU_PREFIX}/Bytecode/include",
 	}
 	files {
-		PREFIX .. "Bytecode/src/*.cpp",
+		"%{LUAU_PREFIX}/Bytecode/src/*.cpp",
 	}
 	
 	filter "action:gmake"
@@ -171,10 +170,10 @@ project "Luau.Common"
 	kind "Staticlib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "Common/include",	
+		"%{LUAU_PREFIX}/Common/include",	
 	}
 	files {
-		PREFIX .. "Common/src/*.cpp",
+		"%{LUAU_PREFIX}/Common/src/*.cpp",
 	}
 	
 	filter "action:gmake"
@@ -184,114 +183,66 @@ project "extern.isocline"
 	kind "Staticlib"
 	language "C"
 	includedirs {
-		PREFIX .. "extern/isocline/include"
+		"%{LUAU_PREFIX}/extern/isocline/include"
 	}
 	files {
-		PREFIX .. "extern/isocline/src/isocline.c"
+		"%{LUAU_PREFIX}/extern/isocline/src/isocline.c"
 	}
 	
 	filter "action:gmake"
 	targetname "isocline"
 
-project "Luau.Tests"
-	kind "ConsoleApp"
-	cppdialect "C++17"
-	includedirs {
-		PREFIX .. "Common/include",
-		PREFIX .. "Ast/include",
-		PREFIX .. "Compiler/include",
-		PREFIX .. "Config/include",
-		PREFIX .. "Analysis/include",
-		PREFIX .. "EqSat/include",
-		PREFIX .. "CodeGen/include",
-		PREFIX .. "VM/include",
-		PREFIX .. "Require/Runtime/include",
-		PREFIX .. "CLI/include",
-		PREFIX .. "Bytecode/include",
-		PREFIX .. "Require/include",
-
-		PREFIX .. "VM/src",
-
-		PREFIX .. "extern/isocline/include",
-		PREFIX .. "extern",
-
-	}
-	files {
-		PREFIX .. "CLI/src/FileUtils.cpp",
-		PREFIX .. "CLI/src/Flags.cpp",
-		PREFIX .. "CLI/src/Profiler.cpp",
-		PREFIX .. "CLI/src/Coverage.cpp",
-		PREFIX .. "CLI/src/Repl.cpp",
-		PREFIX .. "CLI/src/ReplRequirer.cpp",
-		PREFIX .. "CLI/src/VfsNavigator.cpp",
-
-		PREFIX .. "tests/*.cpp",
-	}
-	links {
-		"Luau.Analysis",
-		"Luau.EqSat",
-		"Luau.Compiler",
-		"Luau.Ast",
-		"Luau.Codegen",
-		"Luau.VM",
-		"Luau.Require",
-		"Luau.Requirenavigator",
-		"Luau.Config",
-		"Luau.Bytecode",
-		"Luau.Common",
-		
-		"extern.isocline",
-	}
-	defines {
-		"DOCTEST_CONFIG_DOUBLE_STRINGIFY"
-	}
-	
-	filter "action:gmake"
-	targetname "luau-tests"
-	links { "pthread" }
-
 project "Luau.CLI.Lib"
 	kind "Staticlib"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "CLI/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
 		
-		PREFIX .. "Config/include",
-		PREFIX .. "Ast/include",
+		"%{LUAU_PREFIX}/Config/include",
+		"%{LUAU_PREFIX}/Ast/include",
 	}
 	files {
-		PREFIX .. "CLI/src/FileUtils.cpp",
-		PREFIX .. "CLI/src/Flags.cpp",
-		PREFIX .. "CLI/src/VfsNavigator.cpp",
+		"%{LUAU_PREFIX}/CLI/src/FileUtils.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Flags.cpp",
+		"%{LUAU_PREFIX}/CLI/src/VfsNavigator.cpp",
 	}
 	
 project "luau"
 	kind "ConsoleApp"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "CLI/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
 		
-		PREFIX .. "Ast/include",
-		PREFIX .. "Compiler/include",
-		PREFIX .. "Config/include",
-		PREFIX .. "VM/include",
-		PREFIX .. "CodeGen/include",		
-		PREFIX .. "Require/include",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Compiler/include",
+		"%{LUAU_PREFIX}/Config/include",
 		
-		PREFIX .. "extern/isocline/include",
-		PREFIX .. "extern",
+		"%{LUAU_PREFIX}/VM/include", "%{LUAU_PREFIX}/VM/src",
+		
+		"%{LUAU_PREFIX}/CodeGen/include",		
+		"%{LUAU_PREFIX}/Require/include",
+		
+		"%{LUAU_PREFIX}/Bytecode/include", "%{LUAU_PREFIX}/Bytecode/src",
+		"%{LUAU_PREFIX}/Inliner/include",
+		
+		"%{LUAU_PREFIX}/extern/isocline/include",
+		"%{LUAU_PREFIX}/extern",
 	}
 	files {
-		PREFIX .. "CLI/src/Profiler.cpp",
-		PREFIX .. "CLI/src/Coverage.cpp",
-		PREFIX .. "CLI/src/Counters.cpp",
-		PREFIX .. "CLI/src/Repl.cpp",
-		PREFIX .. "CLI/src/ReplEntry.cpp",
-		PREFIX .. "CLI/src/ReplRequirer.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Profiler.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Coverage.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Counters.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Repl.cpp",
+		"%{LUAU_PREFIX}/CLI/src/ReplEntry.cpp",
+		"%{LUAU_PREFIX}/CLI/src/ReplRequirer.cpp",
+		
+		"%{LUAU_PREFIX}/Inliner/src/*.cpp",
 	}
 	links {
 		"Luau.CLI.Lib",
 		
+		"Luau.Bytecode",
+
 		"Luau.Common",
 		
 		"Luau.Ast",
@@ -299,11 +250,10 @@ project "luau"
 		"Luau.Require",
 
 		"Luau.Config",
-				
+		
 		"Luau.Compiler",
 		"Luau.CodeGen",
 		"Luau.VM",
-		"Luau.Bytecode",
 		
 		"extern.isocline",
 	}
@@ -315,113 +265,278 @@ project "luau-analyze"
 	kind "ConsoleApp"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "CLI/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
 		
-		PREFIX .. "Ast/include",
-		PREFIX .. "Analysis/include",
-		PREFIX .. "EqSat/include",
-		PREFIX .. "Config/include",
-		PREFIX .. "Require/include",
-		PREFIX .. "Require/Navigator/include",
-		PREFIX .. "Bytecode/include",
-		PREFIX .. "VM/include",
-		PREFIX .. "extern",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Analysis/include",
+		"%{LUAU_PREFIX}/EqSat/include",
+		"%{LUAU_PREFIX}/Config/include",
+		"%{LUAU_PREFIX}/Require/include",
+		"%{LUAU_PREFIX}/Require/Navigator/include",
+		"%{LUAU_PREFIX}/Bytecode/include",
+		"%{LUAU_PREFIX}/VM/include",
+		"%{LUAU_PREFIX}/extern",
 	}
 	files {
-		PREFIX .. "CLI/src/Analyze.cpp",
-		PREFIX .. "CLI/src/AnalyzeRequirer.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Analyze.cpp",
+		"%{LUAU_PREFIX}/CLI/src/AnalyzeRequirer.cpp",
 	}
 	links {
 		"Luau.CLI.Lib",
-		
+				
 		"Luau.Common",
 		
+		"Luau.Analysis",
+
 		"Luau.Ast",
 		
+		"Luau.Require",
+
 		"Luau.Config",
 		
-		"Luau.Analysis",
 		"Luau.EqSat",
 		"Luau.Compiler",
 		"Luau.VM",
-		"Luau.Require",
 		"Luau.Bytecode",
 	}
 	
 	filter "action:gmake"
 	links { "pthread" }
 
+project "luau-ast"
+	kind "ConsoleApp"
+	cppdialect "C++17"
+	includedirs {
+		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
+		
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Analysis/include",
+	}
+	files {
+		"%{LUAU_PREFIX}/CLI/src/Ast.cpp",
+	}
+	links {
+		"Luau.CLI.Lib",
+		
+		"Luau.Ast",
+		
+		"Luau.Common",
+			
+		"Luau.Config",	
+	}
+
+project "luau-reduce"
+	kind "ConsoleApp"
+	cppdialect "C++17"
+	includedirs {
+		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
+		
+		"%{LUAU_PREFIX}/Ast/include",
+	}
+	files {
+		"%{LUAU_PREFIX}/CLI/src/Reduce.cpp",
+	}
+	links {
+		"Luau.CLI.Lib",
+		
+		"Luau.Ast",
+		
+		"Luau.Common",
+		
+		"Luau.Config",	
+	}
+
 project "luau-compile"
 	kind "ConsoleApp"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "CLI/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
 		
-		PREFIX .. "Ast/include",
-		PREFIX .. "Compiler/include",
-		PREFIX .. "CodeGen/include",
-		PREFIX .. "VM/include",
-		PREFIX .. "Bytecode/include",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Compiler/include",
+		"%{LUAU_PREFIX}/CodeGen/include",
+		"%{LUAU_PREFIX}/VM/include",
+		"%{LUAU_PREFIX}/Bytecode/include",
 	}
 	files {
-		PREFIX .. "CLI/src/Compile.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Compile.cpp",
 	}
 	links {
-		"Luau.Common", "Luau.Config",
+		"Luau.CLI.Lib",
+		
+		"Luau.Bytecode",
 
+		"Luau.Common",
+		
 		"Luau.Ast",
+		
+		"Luau.Config",
+
 		"Luau.Compiler",
 		"Luau.CodeGen",
 		"Luau.VM",
-		"Luau.Bytecode",
 	}
-	--filter "action:gmake"
-	--links { "pthread" }
-
 	
 project "luau-bytecode"
 	kind "ConsoleApp"
 	cppdialect "C++17"
 	includedirs {
-		PREFIX .. "CLI/include", PREFIX .. "Common/include",
+		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
 		
-		PREFIX .. "Ast/include",
-		PREFIX .. "Compiler/include",
-		PREFIX .. "CodeGen/include",
-		PREFIX .. "VM/include",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Compiler/include",
+		"%{LUAU_PREFIX}/CodeGen/include",
+		"%{LUAU_PREFIX}/VM/include",
 
-		PREFIX .. "Bytecode/include",
+		"%{LUAU_PREFIX}/Bytecode/include",
 	}
 	files {
-		PREFIX .. "CLI/src/Bytecode.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Bytecode.cpp",
 	}
 	links {
 		"Luau.CLI.LIB",
+		
+		"Luau.Bytecode",
 
 		"Luau.Common",
+		
 		"Luau.Ast",
+		
+		"Luau.Config",
+		
 		"Luau.Compiler",
 		"Luau.CodeGen",
 		"Luau.VM",
-		"Luau.Bytecode",
 	}
-	--filter "action:gmake"
-	--links { "pthread" }
+
+project "luau-tests"
+	kind "ConsoleApp"
+	cppdialect "C++17"
+	includedirs {
+		"%{LUAU_PREFIX}/Common/include",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Compiler/include",
+		"%{LUAU_PREFIX}/Config/include",
+		"%{LUAU_PREFIX}/Analysis/include",
+		"%{LUAU_PREFIX}/EqSat/include",
+		"%{LUAU_PREFIX}/CodeGen/include",
+		"%{LUAU_PREFIX}/VM/include", "%{LUAU_PREFIX}/VM/src",
+		"%{LUAU_PREFIX}/Require/Runtime/include",
+		"%{LUAU_PREFIX}/CLI/include",
+		"%{LUAU_PREFIX}/Bytecode/include", "%{LUAU_PREFIX}/Bytecode/src",
+		"%{LUAU_PREFIX}/Require/include",
+		"%{LUAU_PREFIX}/Inliner/include",
+
+		"%{LUAU_PREFIX}/extern/isocline/include",
+		"%{LUAU_PREFIX}/extern",
+
+	}
+	files {
+		"%{LUAU_PREFIX}/CLI/src/Profiler.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Counters.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Coverage.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Repl.cpp",
+		"%{LUAU_PREFIX}/CLI/src/ReplRequirer.cpp",
+		
+		"%{LUAU_PREFIX}/Inliner/src/*.cpp",
+
+		"%{LUAU_PREFIX}/tests/*.cpp",
+	}
+	links {
+		"Luau.CLI.Lib",
+		
+		"Luau.Analysis",
+		"Luau.EqSat",
+		"Luau.Compiler",
+		"Luau.Ast",
+		"Luau.Codegen",
+		"Luau.VM",
+		"Luau.Require",
+		"Luau.Config",
+		"Luau.Bytecode",
+		"Luau.Common",
+		
+		"extern.isocline",
+	}
+	defines {
+		"DOCTEST_CONFIG_DOUBLE_STRINGIFY",
+		"DOCTEST_CONFIG_USE_STD_HEADERS",
+		"LUAU_CONFORMANCE_SOURCE_DIR=%{LUAU_CONFORMANCE_SOURCE_DIR}",
+	}
+	
+	filter "action:gmake"
+	targetname "luau-tests"
+	links { "pthread" }
+
+project "luau-test-link-vm"
+	--kind "None"
+	kind "ConsoleApp"
+	includedirs {
+		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
+		
+		"%{LUAU_PREFIX}/VM/include"
+	}
+	files {
+		"%{LUAU_PREFIX}/tests/link/Vm.test.cpp",
+	}
+	links {
+		"Luau.CLI.Lib",
+		
+		--"Luau.Ast",
+		
+		"Luau.Common",
+		
+		"Luau.Config",
+		
+		"Luau.VM",
+	}
+
+project "luau-test-link-codegen"
+	--kind "None"
+	kind "ConsoleApp"
+	includedirs {
+		"%{LUAU_PREFIX}/CLI/include", "%{LUAU_PREFIX}/Common/include",
+		
+		"%{LUAU_PREFIX}/VM/include",
+		"%{LUAU_PREFIX}/CodeGen/include",
+	}
+	files {
+		"%{LUAU_PREFIX}/tests/link/VmCodeGen.test.cpp",
+	}
+	links {
+		"Luau.CLI.Lib",
+		
+		--"Luau.Ast",
+		
+		"Luau.Common",
+		
+		"Luau.Config",	
+		
+		"Luau.VM",
+		
+		"Luau.Codegen",
+	}
 
 project "Luau.Web"
 	kind "ConsoleApp"
 	includedirs {
-		PREFIX .. "Common/include",
-		PREFIX .. "Compiler/include",
-		PREFIX .. "VM/include",
+		"%{LUAU_PREFIX}/Common/include", "%{LUAU_PREFIX}/Config/include",
+		"%{LUAU_PREFIX}/Ast/include",
+		"%{LUAU_PREFIX}/Compiler/include",
+		"%{LUAU_PREFIX}/VM/include",
+		"%{LUAU_PREFIX}/Analysis/include",
 	}
 	files { 
-		PREFIX .. "CLI/src/Web.cpp",
+		"%{LUAU_PREFIX}/CLI/src/Web.cpp",
 	}
 	links {
+		"Luau.Bytecode",
+		"Luau.Common",
 		"Luau.Ast",
+		"Luau.Config",
 		"Luau.Compiler",
 		"Luau.VM",
+		"Luau.Analysis"
 	}
 	linkoptions {
 		"-sEXPORTED_FUNCTIONS=['_executeScript','_checkScript']",

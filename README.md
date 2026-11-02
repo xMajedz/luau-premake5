@@ -16,5 +16,5 @@ premake5 gmake --os=emscripten --luau-path=luau
 ```
 build
 ```
-make -C luau/build/ config=release Luau.Web
+make -C luau/build config=release Luau.Web
 ```
